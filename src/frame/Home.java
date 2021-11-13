@@ -15,20 +15,15 @@ public class Home extends JFrame{
     private JPanel contentpane;
     private JLabel drawpane;
     private int level;
-    private JFrame optionframe;
-    private JComboBox combo;
-    private JToggleButton[] tb;
     private JButton start, setting, exit;
-    private JTextField scoreText;
-    private MyImageIcon indoorImg, outdoorImg, itemImg;
-    private MySoundEffect hitSound, heroThemeSound;
+    private MyImageIcon indoorImg;
+    private MySoundEffect heroThemeSound;
     private OptionFrame _optionFrame;
     private FirstFrame _firstFrame;
 
     // working variables - adjust the values as you want
-    private int frameWidth = 1366, frameHeight = 768;
+    private int frameWidth = 1200, frameHeight = 800;
     private int optionWidth = 300, optionHeight = 700;
-    private int firstWidth = 1366, firstHeight = 768;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
     public Home() {
@@ -57,7 +52,7 @@ public class Home extends JFrame{
         _optionFrame.setBounds(ss.width / 2 - optionWidth / 2, ss.height / 2 - optionHeight / 2, optionWidth, optionHeight);
         _firstFrame = new FirstFrame();
         _firstFrame.setVisible(false);
-        _firstFrame.setBounds(ss.width / 2 - firstWidth / 2, ss.height / 2 - firstHeight / 2, firstWidth, firstHeight);
+        _firstFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         indoorImg = new MyImageIcon("resources/indoor.jpg").resize(frameWidth, frameHeight);
 
         drawpane = new JLabel();
@@ -85,7 +80,7 @@ public class Home extends JFrame{
         drawpane.add(setting);
         drawpane.add(exit);
         heroThemeSound = new MySoundEffect("resources/herotheme.wav");
-        heroThemeSound.playLoop();
+//        heroThemeSound.playLoop();
         contentpane.add(drawpane, BorderLayout.CENTER);
         validate();
     }
