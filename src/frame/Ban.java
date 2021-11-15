@@ -10,34 +10,34 @@ import javax.swing.*;
 import editor.MyImageIcon;
 import frame.dungeon.Dungeon;
 
-public class FirstFrame extends JFrame implements KeyListener{
+public class Ban extends JFrame implements KeyListener{
     private JPanel contentpane;
-	private JLabel playerLabel, drawpane, objectdoor, objectcave;
-	private MyImageIcon door,dooropen,cave,mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
-	private int playerWidth = 33, playerHeight = 47;
-	private int frameWidth = 1200, frameHeight = 800;
-	private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
-	private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+    private JLabel playerLabel, drawpane, objectdoor, objectcave;
+    private MyImageIcon door,dooropen,cave,mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
+    private int playerWidth = 33, playerHeight = 47;
+    private int frameWidth = 1200, frameHeight = 800;
+    private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
+    private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
 
-	public FirstFrame(){
-		setTitle("AI NUT MAI WAI LEW");
-		contentpane = (JPanel)getContentPane();
+    public Ban(){
+        setTitle("Ban Sand Suk");
+        contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
-		setResizable(false);
-		playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
-	    playerDown2Img = new MyImageIcon("resources/player/D2.png").resize(playerWidth, playerHeight);
-	    playerDown3Img = new MyImageIcon("resources/player/D3.png").resize(playerWidth, playerHeight);
-	    playerUp1Img = new MyImageIcon("resources/player/U1.png").resize(playerWidth, playerHeight);
-	    playerUp2Img = new MyImageIcon("resources/player/U2.png").resize(playerWidth, playerHeight);
-	    playerUp3Img = new MyImageIcon("resources/player/U3.png").resize(playerWidth, playerHeight);
-	    playerLeft1Img = new MyImageIcon("resources/player/L1.png").resize(playerWidth, playerHeight);
-	    playerLeft2Img = new MyImageIcon("resources/player/L2.png").resize(playerWidth, playerHeight);
-	    playerLeft3Img = new MyImageIcon("resources/player/L3.png").resize(playerWidth, playerHeight);
-	    playerRight1Img = new MyImageIcon("resources/player/R1.png").resize(playerWidth, playerHeight);
-	    playerRight2Img = new MyImageIcon("resources/player/R2.png").resize(playerWidth, playerHeight);
-	    playerRight3Img = new MyImageIcon("resources/player/R3.png").resize(playerWidth, playerHeight);
-	    playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
-	    mapbg = new MyImageIcon("resources/map/MAP1.png").resize(frameWidth, frameHeight);
+        setResizable(false);
+        playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
+        playerDown2Img = new MyImageIcon("resources/player/D2.png").resize(playerWidth, playerHeight);
+        playerDown3Img = new MyImageIcon("resources/player/D3.png").resize(playerWidth, playerHeight);
+        playerUp1Img = new MyImageIcon("resources/player/U1.png").resize(playerWidth, playerHeight);
+        playerUp2Img = new MyImageIcon("resources/player/U2.png").resize(playerWidth, playerHeight);
+        playerUp3Img = new MyImageIcon("resources/player/U3.png").resize(playerWidth, playerHeight);
+        playerLeft1Img = new MyImageIcon("resources/player/L1.png").resize(playerWidth, playerHeight);
+        playerLeft2Img = new MyImageIcon("resources/player/L2.png").resize(playerWidth, playerHeight);
+        playerLeft3Img = new MyImageIcon("resources/player/L3.png").resize(playerWidth, playerHeight);
+        playerRight1Img = new MyImageIcon("resources/player/R1.png").resize(playerWidth, playerHeight);
+        playerRight2Img = new MyImageIcon("resources/player/R2.png").resize(playerWidth, playerHeight);
+        playerRight3Img = new MyImageIcon("resources/player/R3.png").resize(playerWidth, playerHeight);
+        playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
+        mapbg = new MyImageIcon("resources/map/MAP1.png").resize(frameWidth, frameHeight);
         door = new MyImageIcon("resources/object/Door.png").resize(52, 52);
         dooropen = new MyImageIcon("resources/object/OpenDoor.png").resize(52, 52);
         cave = new MyImageIcon("resources/object/Cavemouth.png").resize(52, 52);
@@ -48,9 +48,9 @@ public class FirstFrame extends JFrame implements KeyListener{
         objectdoor.setVisible(true);
         objectcave.setVisible(true);
         playerLabel = new JLabel(playerDown1Img);
-	    playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
-	    playerLabel.setVisible(true);
-	    drawpane = new JLabel();
+        playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
+        playerLabel.setVisible(true);
+        drawpane = new JLabel();
         drawpane.setIcon(mapbg);
         drawpane.add(playerLabel);
         drawpane.add(objectdoor);
@@ -58,11 +58,11 @@ public class FirstFrame extends JFrame implements KeyListener{
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-	    setPlayerThread();
-	    contentpane.add(drawpane, BorderLayout.CENTER);
-	    validate();
-	}
-	public void keyTyped(KeyEvent e) {}
+        setPlayerThread();
+        contentpane.add(drawpane, BorderLayout.CENTER);
+        validate();
+    }
+    public void keyTyped(KeyEvent e) {}
 
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode()==KeyEvent.VK_RIGHT) { playerRight = true;}
@@ -81,7 +81,7 @@ public class FirstFrame extends JFrame implements KeyListener{
         if (e.getKeyCode()==KeyEvent.VK_SHIFT){ playerrunning = false;}
     }
     public void actionPlayer(){
-	    if (playerLabel.getBounds().intersects(objectdoor.getBounds())){
+        if (playerLabel.getBounds().intersects(objectdoor.getBounds())){
             this.dispose();
         }
         if (playerLabel.getBounds().intersects(objectcave.getBounds())){
@@ -153,7 +153,7 @@ public class FirstFrame extends JFrame implements KeyListener{
                             playerLabel.setIcon(playerUp3Img);
                         }
                         if (playerCurY>0) {
-                                playerCurY = playerCurY - speed;
+                            playerCurY = playerCurY - speed;
                         }
                         if (playerCurY<183&&playerCurX<135){
                             playerCurY = playerCurY + 1;

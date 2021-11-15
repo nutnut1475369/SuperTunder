@@ -7,6 +7,7 @@
 import editor.MyImageIcon;
 import editor.MySoundEffect;
 import frame.Home;
+import frame.dungeon.Dungeon;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +16,7 @@ import javax.swing.*;
 
 public class Mainapplication {
     public static void main(String[] args) {
+        Dungeon setDungeon = new Dungeon();
         new Home();
     }
 }
