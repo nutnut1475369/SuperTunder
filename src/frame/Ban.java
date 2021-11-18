@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
 import editor.MyImageIcon;
-import frame.dungeon.Dungeon;
 
 public class Ban extends JFrame implements KeyListener{
     private JPanel contentpane;
@@ -16,7 +15,7 @@ public class Ban extends JFrame implements KeyListener{
     private MyImageIcon door,dooropen,cave,mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
     private int playerWidth = 33, playerHeight = 47;
     private int frameWidth = 1200, frameHeight = 800;
-    private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
+    private int playerCurX = 137, playerCurY = 698;
     private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
 
     public Ban(){
@@ -37,24 +36,13 @@ public class Ban extends JFrame implements KeyListener{
         playerRight2Img = new MyImageIcon("resources/player/R2.png").resize(playerWidth, playerHeight);
         playerRight3Img = new MyImageIcon("resources/player/R3.png").resize(playerWidth, playerHeight);
         playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
-        mapbg = new MyImageIcon("resources/map/MAP1.png").resize(frameWidth, frameHeight);
-        door = new MyImageIcon("resources/object/Door.png").resize(52, 52);
-        dooropen = new MyImageIcon("resources/object/OpenDoor.png").resize(52, 52);
-        cave = new MyImageIcon("resources/object/Cavemouth.png").resize(52, 52);
-        objectcave = new JLabel(cave);
-        objectdoor = new JLabel(door);
-        objectdoor.setBounds(120,145,52,52);
-        objectcave.setBounds(1250,80,37,37);
-        objectdoor.setVisible(true);
-        objectcave.setVisible(true);
+        mapbg = new MyImageIcon("resources/map/ban.png").resize(frameWidth, frameHeight);
         playerLabel = new JLabel(playerDown1Img);
         playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
         playerLabel.setVisible(true);
         drawpane = new JLabel();
         drawpane.setIcon(mapbg);
         drawpane.add(playerLabel);
-        drawpane.add(objectdoor);
-        drawpane.add(objectcave);
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -116,11 +104,23 @@ public class Ban extends JFrame implements KeyListener{
                         if (playerCurX>0) {
                             playerCurX = playerCurX - speed;
                         }
-                        if (playerCurX<=90&&playerCurY<=280) {
-                            playerCurX = playerCurX + speed;
+                        if (playerCurX<=380&&(playerCurY>=346&&playerCurY<=477)){
+                            playerCurX = playerCurX + 1;
                         }
-                        if ((playerCurX<=1100&&playerCurX>=190)&&playerCurY<=280) {
-                            playerCurX = playerCurX + speed;
+                        if ((playerCurX>=450&&playerCurX<=517)&&(playerCurY>=148&&playerCurY<=487)){
+                            playerCurX = playerCurX + 1;
+                        }
+                        if (playerCurX<=205&&(playerCurY>=148&&playerCurY<=346)){
+                            playerCurX = playerCurX + 1;
+                        }
+                        if (playerCurX<=90&&playerCurY>=0){
+                            playerCurX = playerCurX + 1;
+                        }
+                        if ((playerCurX>=700&&playerCurX<=765)&&(playerCurY>=280&&playerCurY<=477)){
+                            playerCurX = playerCurX + 1;
+                        }
+                        if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=551&&playerCurY<=660)){
+                            playerCurX = playerCurX + 1;
                         }
                     }else
                     if(playerRight)
@@ -137,9 +137,29 @@ public class Ban extends JFrame implements KeyListener{
                         if (playerCurX+playerWidth+(playerWidth/2)<frameWidth) {
                             playerCurX = playerCurX + speed;
                         }
-                        if ((playerCurX>=135&&playerCurX<=1100)&&playerCurY<=280){
+                        if ((playerCurX>=620&&playerCurX<=755)&&(playerCurY>=280&&playerCurY<=410)){
                             playerCurX = playerCurX - 1;
                         }
+                        if ((playerCurX>=450&&playerCurX<=517)&&(playerCurY>=148&&playerCurY<=346)){
+                            playerCurX = playerCurX - 1;
+                        }
+                        if ((playerCurX>=380&&playerCurX<=400)&&(playerCurY>=346&&playerCurY<=477)){
+                            playerCurX = playerCurX - 1;
+                        }
+                        if ((playerCurX>=656&&playerCurX<=755)&&(playerCurY>=410&&playerCurY<=708)){
+                            playerCurX = playerCurX - 1;
+                        }
+                        if (playerCurX>=985&&(playerCurY>=280&&playerCurY<=708)){
+                            playerCurX = playerCurX - 1;
+                        }
+                        if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=551&&playerCurY<=660)){
+                            playerCurX = playerCurX - 1;
+                        }
+                        if (playerCurX==655&&(playerCurY>=628&&playerCurY<=678)){
+                            playerCurX = 805;
+                            playerCurY = 430;
+                        }
+
                     }else
                     if(playerUp)
                     {
@@ -158,10 +178,24 @@ public class Ban extends JFrame implements KeyListener{
                         if (playerCurY<183&&playerCurX<135){
                             playerCurY = playerCurY + 1;
                         }
-                        if ((playerCurX<=90||(playerCurX>=135&&playerCurX<=1100))&&playerCurY<=280) {
+                        if ((playerCurX>=517&&playerCurX<=620)&&playerCurY<=280) {
                             playerCurY = playerCurY + 1;
                         }
-
+                        if ((playerCurX>=755&&playerCurX<=985)&&playerCurY<=280){
+                            playerCurY = playerCurY + 1;
+                        }
+                        if (playerCurX>=0&&playerCurY<=148){
+                            playerCurY = playerCurY + 1;
+                        }
+                        if(((playerCurX>=0&&playerCurX<=380)||(playerCurX>=400&&playerCurX<=517))&&(playerCurY>=340&&playerCurY<=487)) {
+                            playerCurY = playerCurY + 1;
+                        }
+                        if((playerCurX>=625&&playerCurX<=755)&&playerCurY<=410) {
+                            playerCurY = playerCurY + 1;
+                        }
+                        if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=551&&playerCurY<=660)){
+                            playerCurY = playerCurY + 1;
+                        }
                     }else
                     if(playerDown)
                     {
@@ -174,8 +208,28 @@ public class Ban extends JFrame implements KeyListener{
                         }else if (moveMent%100==0){
                             playerLabel.setIcon(playerDown3Img);
                         }
-                        if (playerCurY<417) {
+                        if (playerCurY<=706) {
                             playerCurY = playerCurY + speed;
+                        }
+                        if ((playerCurX>=110&&playerCurX<=150)&&(playerCurY>=700&&playerCurY<=730)){
+                            setVisible(false);
+                            playerDown = false;
+                        }
+                        if(playerCurX>=755&&playerCurY>=430) {
+                            playerCurY = playerCurY - 1;
+                        }
+                        if ((playerCurX>=450&&playerCurX<=517)&&playerCurY==346){
+                            playerCurY = playerCurY - 1;
+                        }
+                        if (((playerCurX>=0&&playerCurX<380)||(playerCurX>400&&playerCurX<=517))&&(playerCurY>=340&&playerCurY<=487)){
+                            playerCurY = playerCurY - 1;
+                        }
+                        if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=550&&playerCurY<=551)){
+                            playerCurY = playerCurY - 1;
+                        }
+                        if ((playerCurX>=793&&playerCurX<=813)&&(playerCurY>=428&&playerCurY<=430)){
+                            playerCurX = 655;
+                            playerCurY = 642;
                         }
                     }else
                     {

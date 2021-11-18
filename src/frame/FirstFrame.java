@@ -18,12 +18,18 @@ public class FirstFrame extends JFrame implements KeyListener{
 	private int frameWidth = 1200, frameHeight = 800;
 	private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
 	private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+    private Ban _Ban;
+
+    Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public FirstFrame(){
 		setTitle("AI NUT MAI WAI LEW");
 		contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
 		setResizable(false);
+        _Ban = new Ban();
+        _Ban.setVisible(false);
+        _Ban.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
 		playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
 	    playerDown2Img = new MyImageIcon("resources/player/D2.png").resize(playerWidth, playerHeight);
 	    playerDown3Img = new MyImageIcon("resources/player/D3.png").resize(playerWidth, playerHeight);
@@ -82,7 +88,8 @@ public class FirstFrame extends JFrame implements KeyListener{
     }
     public void actionPlayer(){
 	    if (playerLabel.getBounds().intersects(objectdoor.getBounds())){
-            this.dispose();
+            _Ban.setVisible(true);
+            playerUp = false;
         }
         if (playerLabel.getBounds().intersects(objectcave.getBounds())){
 
@@ -90,110 +97,106 @@ public class FirstFrame extends JFrame implements KeyListener{
     }
     public void setPlayerThread()
     {
-        Thread playerThread = new Thread(){
-            public void run()
+        // end run
+        Thread playerThread = new Thread(() -> {
+            int moveMent = 0;
+            int speed;
+            while (true)
             {
-                int moveMent = 0;
-                int speed;
-                while (true)
+                if (playerrunning){
+                    speed = 50;
+                }else {
+                    speed = 1;
+                }
+                if (playerLeft)
                 {
-                    if (playerrunning){
-                        speed = 50;
-                    }else {
-                        speed = 1;
+                    if (moveMent%100==75){
+                        playerLabel.setIcon(playerLeft1Img);
+                    }else if(moveMent%100==50){
+                        playerLabel.setIcon(playerLeft2Img);
+                    }else if (moveMent%100==25){
+                        playerLabel.setIcon(playerLeft1Img);
+                    }else if (moveMent%100==0){
+                        playerLabel.setIcon(playerLeft3Img);
                     }
-                    if (playerLeft)
-                    {
-                        if (moveMent%100==75){
-                            playerLabel.setIcon(playerLeft1Img);
-                        }else if(moveMent%100==50){
-                            playerLabel.setIcon(playerLeft2Img);
-                        }else if (moveMent%100==25){
-                            playerLabel.setIcon(playerLeft1Img);
-                        }else if (moveMent%100==0){
-                            playerLabel.setIcon(playerLeft3Img);
-                        }
-                        if (playerCurX>0) {
-                            playerCurX = playerCurX - speed;
-                        }
-                        if (playerCurX<=90&&playerCurY<=280) {
-                            playerCurX = playerCurX + speed;
-                        }
-                        if ((playerCurX<=1100&&playerCurX>=190)&&playerCurY<=280) {
-                            playerCurX = playerCurX + speed;
-                        }
-                    }else
-                    if(playerRight)
-                    {
-                        if (moveMent%100==75){
-                            playerLabel.setIcon(playerRight1Img);
-                        }else if(moveMent%100==50){
-                            playerLabel.setIcon(playerRight2Img);
-                        }else if (moveMent%100==25){
-                            playerLabel.setIcon(playerRight1Img);
-                        }else if (moveMent%100==0){
-                            playerLabel.setIcon(playerRight3Img);
-                        }
-                        if (playerCurX+playerWidth+(playerWidth/2)<frameWidth) {
-                            playerCurX = playerCurX + speed;
-                        }
-                        if ((playerCurX>=135&&playerCurX<=1100)&&playerCurY<=280){
-                            playerCurX = playerCurX - 1;
-                        }
-                    }else
-                    if(playerUp)
-                    {
-                        if (moveMent%100==75){
-                            playerLabel.setIcon(playerUp1Img);
-                        }else if(moveMent%100==50){
-                            playerLabel.setIcon(playerUp2Img);
-                        }else if (moveMent%100==25){
-                            playerLabel.setIcon(playerUp1Img);
-                        }else if (moveMent%100==0){
-                            playerLabel.setIcon(playerUp3Img);
-                        }
-                        if (playerCurY>0) {
-                                playerCurY = playerCurY - speed;
-                        }
-                        if (playerCurY<183&&playerCurX<135){
-                            playerCurY = playerCurY + 1;
-                        }
-                        if ((playerCurX<=90||(playerCurX>=135&&playerCurX<=1100))&&playerCurY<=280) {
-                            playerCurY = playerCurY + 1;
-                        }
+                    if (playerCurX>0) {
+                        playerCurX = playerCurX - speed;
+                    }
+                    if (playerCurX<=90&&playerCurY<=280) {
+                        playerCurX = playerCurX + speed;
+                    }
+                    if ((playerCurX<=1100&&playerCurX>=190)&&playerCurY<=280) {
+                        playerCurX = playerCurX + speed;
+                    }
+                }else
+                if(playerRight)
+                {
+                    if (moveMent%100==75){
+                        playerLabel.setIcon(playerRight1Img);
+                    }else if(moveMent%100==50){
+                        playerLabel.setIcon(playerRight2Img);
+                    }else if (moveMent%100==25){
+                        playerLabel.setIcon(playerRight1Img);
+                    }else if (moveMent%100==0){
+                        playerLabel.setIcon(playerRight3Img);
+                    }
+                    if (playerCurX+playerWidth+(playerWidth/2)<frameWidth) {
+                        playerCurX = playerCurX + speed;
+                    }
+                    if ((playerCurX>=135&&playerCurX<=1100)&&playerCurY<=280){
+                        playerCurX = playerCurX - 1;
+                    }
+                }else
+                if(playerUp)
+                {
+                    if (moveMent%100==75){
+                        playerLabel.setIcon(playerUp1Img);
+                    }else if(moveMent%100==50){
+                        playerLabel.setIcon(playerUp2Img);
+                    }else if (moveMent%100==25){
+                        playerLabel.setIcon(playerUp1Img);
+                    }else if (moveMent%100==0){
+                        playerLabel.setIcon(playerUp3Img);
+                    }
+                    if (playerCurY>0) {
+                            playerCurY = playerCurY - speed;
+                    }
+                    if (playerCurY<183&&playerCurX<135){
+                        playerCurY = playerCurY + 1;
+                    }
+                    if ((playerCurX<=90||(playerCurX>=135&&playerCurX<=1100))&&playerCurY<=280) {
+                        playerCurY = playerCurY + 1;
+                    }
 
-                    }else
-                    if(playerDown)
-                    {
-                        if (moveMent%100==75){
-                            playerLabel.setIcon(playerDown1Img);
-                        }else if(moveMent%100==50){
-                            playerLabel.setIcon(playerDown2Img);
-                        }else if (moveMent%100==25){
-                            playerLabel.setIcon(playerDown1Img);
-                        }else if (moveMent%100==0){
-                            playerLabel.setIcon(playerDown3Img);
-                        }
-                        if (playerCurY<417) {
-                            playerCurY = playerCurY + speed;
-                        }
-                    }else
-                    {
-                        if (moveMent%200==100){
-                            playerLabel.setIcon(playerDownmovementImg);
-                        }else if(moveMent%200==0){
-                            playerLabel.setIcon(playerDown1Img);
-                        }
+                }else
+                if(playerDown)
+                {
+                    if (moveMent%100==75){
+                        playerLabel.setIcon(playerDown1Img);
+                    }else if(moveMent%100==50){
+                        playerLabel.setIcon(playerDown2Img);
+                    }else if (moveMent%100==25){
+                        playerLabel.setIcon(playerDown1Img);
+                    }else if (moveMent%100==0){
+                        playerLabel.setIcon(playerDown3Img);
                     }
-                    System.out.println(playerCurX);
-                    System.out.println(playerCurY);
-                    playerLabel.setLocation(playerCurX, playerCurY);
-                    repaint();
-                    try { Thread.sleep(7); moveMent += 1;}
-                    catch (InterruptedException e) { e.printStackTrace(); }
-                } // end while
-            };// end run
-        }; // end thread creation
+                    if (playerCurY<417) {
+                        playerCurY = playerCurY + speed;
+                    }
+                }else
+                {
+                    if (moveMent%200==100){
+                        playerLabel.setIcon(playerDownmovementImg);
+                    }else if(moveMent%200==0){
+                        playerLabel.setIcon(playerDown1Img);
+                    }
+                }
+                playerLabel.setLocation(playerCurX, playerCurY);
+                repaint();
+                try { Thread.sleep(7); moveMent += 1;}
+                catch (InterruptedException e) { e.printStackTrace(); }
+            } // end while
+        }); // end thread creation
         playerThread.start();
     }
 }

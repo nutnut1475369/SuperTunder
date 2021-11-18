@@ -6,6 +6,7 @@
 */
 import editor.MyImageIcon;
 import editor.MySoundEffect;
+import frame.Ban;
 import frame.Home;
 import frame.dungeon.Dungeon;
 
