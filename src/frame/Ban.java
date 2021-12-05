@@ -239,8 +239,7 @@ public class Ban extends JFrame implements KeyListener{
                             playerLabel.setIcon(playerDown1Img);
                         }
                     }
-                    System.out.println(playerCurX);
-                    System.out.println(playerCurY);
+
                     playerLabel.setLocation(playerCurX, playerCurY);
                     repaint();
                     try { Thread.sleep(7); moveMent += 1;}

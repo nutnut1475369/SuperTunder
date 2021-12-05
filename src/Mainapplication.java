@@ -17,7 +17,6 @@ import javax.swing.*;
 
 public class Mainapplication {
     public static void main(String[] args) {
-        Dungeon setDungeon = new Dungeon();
         new Home();
     }
 }

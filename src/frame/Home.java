@@ -50,9 +50,7 @@ public class Home extends JFrame{
         _optionFrame = new OptionFrame();
         _optionFrame.setVisible(false);
         _optionFrame.setBounds(ss.width / 2 - optionWidth / 2, ss.height / 2 - optionHeight / 2, optionWidth, optionHeight);
-        _firstFrame = new FirstFrame();
-        _firstFrame.setVisible(false);
-        _firstFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
+
         indoorImg = new MyImageIcon("resources/indoor.jpg").resize(frameWidth, frameHeight);
 
         drawpane = new JLabel();
@@ -68,6 +66,8 @@ public class Home extends JFrame{
         start.addActionListener(e->{
             level = _optionFrame.getLevel();
             System.out.println(level);
+            _firstFrame = new FirstFrame(level);
+            _firstFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
             _firstFrame.setVisible(true);
         });
         setting.addActionListener(e->{

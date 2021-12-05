@@ -3,6 +3,9 @@ package frame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
@@ -19,10 +22,12 @@ public class FirstFrame extends JFrame implements KeyListener{
 	private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
 	private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
     private Ban _Ban;
+    private int level;
 
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-	public FirstFrame(){
+	public FirstFrame(int _level){
+	    level=_level;
 		setTitle("AI NUT MAI WAI LEW");
 		contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
@@ -50,7 +55,7 @@ public class FirstFrame extends JFrame implements KeyListener{
         objectcave = new JLabel(cave);
         objectdoor = new JLabel(door);
         objectdoor.setBounds(120,145,52,52);
-        objectcave.setBounds(1250,80,37,37);
+        objectcave.setBounds(1125,15,37,37);
         objectdoor.setVisible(true);
         objectcave.setVisible(true);
         playerLabel = new JLabel(playerDown1Img);
@@ -92,7 +97,11 @@ public class FirstFrame extends JFrame implements KeyListener{
             playerUp = false;
         }
         if (playerLabel.getBounds().intersects(objectcave.getBounds())){
-
+            int[] monsterAlive = new int[level];
+            Arrays.fill(monsterAlive,1);
+            System.out.println(Arrays.toString(monsterAlive));
+            new Dungeon(1,monsterAlive,level,0);
+            this.dispose();
         }
     }
     public void setPlayerThread()
