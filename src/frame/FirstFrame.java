@@ -3,6 +3,7 @@ package frame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +30,12 @@ public class FirstFrame extends JFrame implements KeyListener{
 	public FirstFrame(int _level){
 	    level=_level;
 		setTitle("AI NUT MAI WAI LEW");
-		contentpane = (JPanel)getContentPane();
+        setTitle("AI NUT MAI WAI LEW");
+        setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
+        setResizable(false);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
 		setResizable(false);
         _Ban = new Ban();
@@ -97,11 +103,14 @@ public class FirstFrame extends JFrame implements KeyListener{
             playerUp = false;
         }
         if (playerLabel.getBounds().intersects(objectcave.getBounds())){
-            int[] monsterAlive = new int[level];
-            Arrays.fill(monsterAlive,1);
-            System.out.println(Arrays.toString(monsterAlive));
-            new Dungeon(1,monsterAlive,level,0);
-            this.dispose();
+            if (level==0){
+            }else {
+                int[] monsterAlive = new int[level];
+                Arrays.fill(monsterAlive, 1);
+                System.out.println(Arrays.toString(monsterAlive));
+                new Dungeon(1, monsterAlive, level, 0);
+                this.dispose();
+            }
         }
     }
     public void setPlayerThread()

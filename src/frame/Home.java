@@ -23,7 +23,6 @@ public class Home extends JFrame{
 
     // working variables - adjust the values as you want
     private int frameWidth = 1200, frameHeight = 800;
-    private int optionWidth = 300, optionHeight = 700;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
     public Home() {
@@ -49,14 +48,11 @@ public class Home extends JFrame{
     public void AddComponents() {
         _optionFrame = new OptionFrame();
         _optionFrame.setVisible(false);
-        _optionFrame.setBounds(ss.width / 2 - optionWidth / 2, ss.height / 2 - optionHeight / 2, optionWidth, optionHeight);
-
+        _optionFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         indoorImg = new MyImageIcon("resources/indoor.jpg").resize(frameWidth, frameHeight);
-
         drawpane = new JLabel();
         drawpane.setIcon(indoorImg);
         drawpane.setLayout(null);
-
         start = new JButton("Start");
         setting = new JButton("Setting");
         exit = new JButton("Exit");
@@ -65,10 +61,8 @@ public class Home extends JFrame{
         exit.setBounds(frameWidth / 2-125, frameHeight - 250, 250, 80);
         start.addActionListener(e->{
             level = _optionFrame.getLevel();
-            System.out.println(level);
-            _firstFrame = new FirstFrame(level);
-            _firstFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
-            _firstFrame.setVisible(true);
+            new FirstFrame(level);
+            this.dispose();
         });
         setting.addActionListener(e->{
             _optionFrame.setVisible(true);
@@ -80,7 +74,7 @@ public class Home extends JFrame{
         drawpane.add(setting);
         drawpane.add(exit);
         heroThemeSound = new MySoundEffect("resources/herotheme.wav");
-//        heroThemeSound.playLoop();
+        heroThemeSound.playLoop();
         contentpane.add(drawpane, BorderLayout.CENTER);
         validate();
     }
