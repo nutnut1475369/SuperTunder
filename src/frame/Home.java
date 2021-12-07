@@ -5,8 +5,6 @@ import editor.MySoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -15,13 +13,13 @@ public class Home extends JFrame{
     private JPanel contentpane;
     private JLabel drawpane;
     private int level;
+    private String skin;
     private JButton start, setting, exit;
     private MyImageIcon indoorImg;
     private MySoundEffect heroThemeSound;
     private OptionFrame _optionFrame;
-    private FirstFrame _firstFrame;
+    private String name;
 
-    // working variables - adjust the values as you want
     private int frameWidth = 1200, frameHeight = 800;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -61,7 +59,10 @@ public class Home extends JFrame{
         exit.setBounds(frameWidth / 2-125, frameHeight - 250, 250, 80);
         start.addActionListener(e->{
             level = _optionFrame.getLevel();
-            new FirstFrame(level);
+            heroThemeSound.stop();
+            name = _optionFrame.getName();
+            skin = _optionFrame.getSkin();
+            new FirstFrame(level,name,skin);
             this.dispose();
         });
         setting.addActionListener(e->{

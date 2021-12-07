@@ -3,13 +3,9 @@ package frame.dungeon;
 import editor.MyImageIcon;
 import frame.EndingFrame;
 import frame.FirstFrame;
-import frame.Home;
-import frame.OptionFrame;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Dungeon extends JFrame implements MouseMotionListener, KeyListener {
     private JPanel contentpane;
@@ -22,10 +18,13 @@ public class Dungeon extends JFrame implements MouseMotionListener, KeyListener 
     private int monsterCurX = (frameWidth / 2 - playerWidth / 2) + 100, monsterCurY = (frameHeight / 2 - playerHeight / 2) + 100;
     private boolean playerAlive = true,attack = false, playerrunning = false, playerUp = false, playerDown = false, playerLeft = false, playerRight = false;
     private int[] monsterAlive;
+    private String name,skin;
     private FirstFrame _firstFrame;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public Dungeon(int _state, int[] _monsterAlive ,int _level,int _position) {
+    public Dungeon(int _state, int[] _monsterAlive ,int _level,int _position,String _name,String _skin) {
+        name =_name;
+        skin = _skin;
         monsterAlive=_monsterAlive;
         level=_level;
         state = _state;
@@ -178,7 +177,7 @@ public class Dungeon extends JFrame implements MouseMotionListener, KeyListener 
             int moveMent = 0;
             int speed;
             int hp = 10/level;
-            while (true) {
+            while (playerAlive) {
                 if (!attack&&cd<=0)
                 {
                     if (playerrunning) {
@@ -202,9 +201,9 @@ public class Dungeon extends JFrame implements MouseMotionListener, KeyListener 
                         if (playerCurX < 100) {
                             state -= 1;
                             if (state != 0) {
-                                new Dungeon(state, monsterAlive, level, 1);
+                                new Dungeon(state, monsterAlive, level, 1,name,skin);
                             } else {
-                                _firstFrame = new FirstFrame(level);
+                                _firstFrame = new FirstFrame(level,name,skin);
                                 _firstFrame.setVisible(true);
                                 _firstFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
                                 this.dispose();
@@ -228,11 +227,11 @@ public class Dungeon extends JFrame implements MouseMotionListener, KeyListener 
                         if (playerCurX > frameWidth - 100 && monsterAlive[state - 1] == 0) {
                             state += 1;
                             if (state == level + 1) {
-                                new EndingFrame();
+                                new EndingFrame(name,skin,false);
                                 this.dispose();
                                 break;
                             }
-                            new Dungeon(state, monsterAlive, level, 0);
+                            new Dungeon(state, monsterAlive, level, 0,name,skin);
                             this.dispose();
                             break;
                         }
@@ -342,7 +341,10 @@ public class Dungeon extends JFrame implements MouseMotionListener, KeyListener 
                 playerLabel.setLocation(playerCurX, playerCurY);
                 repaint();
                 if (hp<=0){
-
+                    playerAlive = false;
+                    new EndingFrame(name,skin,true);
+                    this.dispose();
+                    break;
                 }
                 try {
                     Thread.sleep(7);

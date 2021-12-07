@@ -3,33 +3,35 @@ package frame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 
 import editor.MyImageIcon;
+import editor.MyLabel;
 import frame.dungeon.Dungeon;
 
 public class FirstFrame extends JFrame implements KeyListener{
     private JPanel contentpane;
 	private JLabel playerLabel, drawpane, objectdoor, objectcave;
-	private MyImageIcon door,dooropen,cave,mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
+	private MyImageIcon door,cave,mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
 	private int playerWidth = 33, playerHeight = 47;
 	private int frameWidth = 1200, frameHeight = 800;
 	private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
-	private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+	private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
     private Ban _Ban;
+    private MyLabel signLabel;
+    private String name,skin;
     private int level;
 
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-	public FirstFrame(int _level){
+	public FirstFrame(int _level, String _name, String _skin){
 	    level=_level;
-		setTitle("AI NUT MAI WAI LEW");
+        skin = _skin;
+        name = _name;
         setTitle("AI NUT MAI WAI LEW");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
@@ -38,7 +40,7 @@ public class FirstFrame extends JFrame implements KeyListener{
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
 		setResizable(false);
-        _Ban = new Ban();
+        _Ban = new Ban(name,skin);
         _Ban.setVisible(false);
         _Ban.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
 		playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
@@ -56,7 +58,6 @@ public class FirstFrame extends JFrame implements KeyListener{
 	    playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
 	    mapbg = new MyImageIcon("resources/map/MAP1.png").resize(frameWidth, frameHeight);
         door = new MyImageIcon("resources/object/Door.png").resize(52, 52);
-        dooropen = new MyImageIcon("resources/object/OpenDoor.png").resize(52, 52);
         cave = new MyImageIcon("resources/object/Cavemouth.png").resize(52, 52);
         objectcave = new JLabel(cave);
         objectdoor = new JLabel(door);
@@ -67,7 +68,21 @@ public class FirstFrame extends JFrame implements KeyListener{
         playerLabel = new JLabel(playerDown1Img);
 	    playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
 	    playerLabel.setVisible(true);
-	    drawpane = new JLabel();
+        drawpane = new JLabel();
+
+        if (level >= 1){
+            signLabel = new MyLabel("resources/object/sign.png").setLabel(50,50,10,20);
+            drawpane.add(signLabel);
+            signLabel.addMouseListener(new MouseListener() {
+                public void mouseClicked(MouseEvent e) {
+                    new signText();
+                }
+                public void mousePressed(MouseEvent e) {}
+                public void mouseReleased(MouseEvent e) {}
+                public void mouseEntered(MouseEvent e) {}
+                public void mouseExited(MouseEvent e) {}
+            });
+	    }
         drawpane.setIcon(mapbg);
         drawpane.add(playerLabel);
         drawpane.add(objectdoor);
@@ -101,6 +116,7 @@ public class FirstFrame extends JFrame implements KeyListener{
 	    if (playerLabel.getBounds().intersects(objectdoor.getBounds())){
             _Ban.setVisible(true);
             playerUp = false;
+            this.dispose();
         }
         if (playerLabel.getBounds().intersects(objectcave.getBounds())){
             if (level==0){
@@ -108,7 +124,8 @@ public class FirstFrame extends JFrame implements KeyListener{
                 int[] monsterAlive = new int[level];
                 Arrays.fill(monsterAlive, 1);
                 System.out.println(Arrays.toString(monsterAlive));
-                new Dungeon(1, monsterAlive, level, 0);
+                new Dungeon(1, monsterAlive, level, 0,name,skin);
+                playerAlive=false;
                 this.dispose();
             }
         }
@@ -119,7 +136,7 @@ public class FirstFrame extends JFrame implements KeyListener{
         Thread playerThread = new Thread(() -> {
             int moveMent = 0;
             int speed;
-            while (true)
+            while (playerAlive)
             {
                 if (playerrunning){
                     speed = 50;

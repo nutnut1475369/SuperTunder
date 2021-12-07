@@ -16,10 +16,13 @@ public class Ban extends JFrame implements KeyListener{
     private int playerWidth = 33, playerHeight = 47;
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = 137, playerCurY = 698;
-    private boolean playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+    private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+    private String name,skin;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public Ban(){
+    public Ban(String _name,String _skin){
+        name = _name;
+        skin = _skin;
         setTitle("Ban Sand Suk");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
@@ -79,7 +82,7 @@ public class Ban extends JFrame implements KeyListener{
         Thread playerThread = new Thread(() -> {
             int moveMent = 0;
             int speed;
-            while (true)
+            while (playerAlive)
             {
                 if (playerrunning){
                     speed = 50;
@@ -208,8 +211,9 @@ public class Ban extends JFrame implements KeyListener{
                         playerCurY = playerCurY + speed;
                     }
                     if ((playerCurX>=110&&playerCurX<=150)&&(playerCurY>=700&&playerCurY<=730)){
-                        new FirstFrame(0);
+                        new FirstFrame(0,name,skin);
                         playerDown = false;
+                        this.dispose();
                     }
                     if(playerCurX>=755&&playerCurY>=430) {
                         playerCurY = playerCurY - 1;

@@ -1,19 +1,10 @@
 package frame;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 
 import editor.MyImageIcon;
-import frame.dungeon.Dungeon;
 
 public class EndingFrame extends JFrame {
     private JPanel contentpane;
@@ -22,12 +13,14 @@ public class EndingFrame extends JFrame {
     private int playerWidth = 33, playerHeight = 47;
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
+    private String name,skin;
     private JButton Ban,homeScene;
 
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public EndingFrame(){
-
+    public EndingFrame(String _name,String _skin,boolean died){
+        name = _name;
+        skin = _skin;
         setTitle("AI NUT MAI WAI LEW");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
@@ -46,7 +39,7 @@ public class EndingFrame extends JFrame {
         Ban = new JButton("ban");
         Ban.setBounds(100,100,10,10);
         Ban.addActionListener(e->{
-            new Ban();
+            new Ban(name,skin);
             this.dispose();
         });
         contentpane = (JPanel)getContentPane();
