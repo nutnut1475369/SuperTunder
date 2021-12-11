@@ -3,50 +3,64 @@ package frame;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.concurrent.TimeUnit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
 import editor.MyImageIcon;
+import editor.MySoundEffect;
 
 public class Ban extends JFrame implements KeyListener{
     private JPanel contentpane;
     private JLabel playerLabel, drawpane;
     private MyImageIcon mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
-    private int playerWidth = 33, playerHeight = 47;
+    private int playerWidth = 60, playerHeight = 60;
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = 137, playerCurY = 698;
+    private int level;
     private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
     private String name,skin;
-    Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
+    private boolean dungeon;
+    private MySoundEffect heroThemeSound;
 
-    public Ban(String _name,String _skin){
+    Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
+    public Ban(String _name,String _skin,boolean _dungeon,int _level){
         name = _name;
+        level = _level;
+        dungeon = _dungeon;
         skin = _skin;
         setTitle("Ban Sand Suk");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                heroThemeSound.stop();
+            }
+        });
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
-        playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
-        playerDown2Img = new MyImageIcon("resources/player/D2.png").resize(playerWidth, playerHeight);
-        playerDown3Img = new MyImageIcon("resources/player/D3.png").resize(playerWidth, playerHeight);
-        playerUp1Img = new MyImageIcon("resources/player/U1.png").resize(playerWidth, playerHeight);
-        playerUp2Img = new MyImageIcon("resources/player/U2.png").resize(playerWidth, playerHeight);
-        playerUp3Img = new MyImageIcon("resources/player/U3.png").resize(playerWidth, playerHeight);
-        playerLeft1Img = new MyImageIcon("resources/player/L1.png").resize(playerWidth, playerHeight);
-        playerLeft2Img = new MyImageIcon("resources/player/L2.png").resize(playerWidth, playerHeight);
-        playerLeft3Img = new MyImageIcon("resources/player/L3.png").resize(playerWidth, playerHeight);
-        playerRight1Img = new MyImageIcon("resources/player/R1.png").resize(playerWidth, playerHeight);
-        playerRight2Img = new MyImageIcon("resources/player/R2.png").resize(playerWidth, playerHeight);
-        playerRight3Img = new MyImageIcon("resources/player/R3.png").resize(playerWidth, playerHeight);
-        playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
+        playerDown1Img = new MyImageIcon("resources/player/"+ skin +"/D1.png").resize(playerWidth, playerHeight);
+        playerDown2Img = new MyImageIcon("resources/player/"+ skin +"/D2.png").resize(playerWidth, playerHeight);
+        playerDown3Img = new MyImageIcon("resources/player/"+ skin +"/D3.png").resize(playerWidth, playerHeight);
+        playerUp1Img = new MyImageIcon("resources/player/"+ skin +"/U1.png").resize(playerWidth, playerHeight);
+        playerUp2Img = new MyImageIcon("resources/player/"+ skin +"/U2.png").resize(playerWidth, playerHeight);
+        playerUp3Img = new MyImageIcon("resources/player/"+ skin +"/U3.png").resize(playerWidth, playerHeight);
+        playerLeft1Img = new MyImageIcon("resources/player/"+ skin +"/L1.png").resize(playerWidth, playerHeight);
+        playerLeft2Img = new MyImageIcon("resources/player/"+ skin +"/L2.png").resize(playerWidth, playerHeight);
+        playerLeft3Img = new MyImageIcon("resources/player/"+ skin +"/L3.png").resize(playerWidth, playerHeight);
+        playerRight1Img = new MyImageIcon("resources/player/"+ skin +"/R1.png").resize(playerWidth, playerHeight);
+        playerRight2Img = new MyImageIcon("resources/player/"+ skin +"/R2.png").resize(playerWidth, playerHeight);
+        playerRight3Img = new MyImageIcon("resources/player/"+ skin +"/R3.png").resize(playerWidth, playerHeight);
+        playerDownmovementImg = new MyImageIcon("resources/player/"+ skin +"/STOP.png").resize(playerWidth, playerHeight);
         mapbg = new MyImageIcon("resources/map/ban.png").resize(frameWidth, frameHeight);
         playerLabel = new JLabel(playerDown1Img);
         playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
         playerLabel.setVisible(true);
+        heroThemeSound = new MySoundEffect("resources/Ban.wav");
+        heroThemeSound.playLoop();
         drawpane = new JLabel();
         drawpane.setIcon(mapbg);
         drawpane.add(playerLabel);
@@ -211,7 +225,13 @@ public class Ban extends JFrame implements KeyListener{
                         playerCurY = playerCurY + speed;
                     }
                     if ((playerCurX>=110&&playerCurX<=150)&&(playerCurY>=700&&playerCurY<=730)){
-                        new FirstFrame(0,name,skin);
+                        if (dungeon) {
+                            heroThemeSound.stop();
+                            new FirstFrame(level, name, skin,dungeon,0);
+                        }else {
+                            heroThemeSound.stop();
+                            new FirstFrame(level, name, skin,dungeon,0);
+                        }
                         playerDown = false;
                         this.dispose();
                     }
@@ -239,7 +259,6 @@ public class Ban extends JFrame implements KeyListener{
                         playerLabel.setIcon(playerDown1Img);
                     }
                 }
-
                 playerLabel.setLocation(playerCurX, playerCurY);
                 repaint();
                 try { Thread.sleep(7); moveMent += 1;}

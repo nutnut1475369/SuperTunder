@@ -10,7 +10,8 @@ public class EndingFrame extends JFrame {
     private JPanel contentpane;
     private JLabel playerLabel, drawpane;
     private MyImageIcon endingbg, playerDown1Img,playerDownmovementImg;
-    private int playerWidth = 33, playerHeight = 47;
+    private int playerWidth = 60, playerHeight = 60;
+
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
     private String name,skin;
@@ -39,14 +40,14 @@ public class EndingFrame extends JFrame {
         Ban = new JButton("ban");
         Ban.setBounds(100,100,10,10);
         Ban.addActionListener(e->{
-            new Ban(name,skin);
+            new Ban(name,skin,false,0);
             this.dispose();
         });
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
         setResizable(false);
-        playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
-        playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
+        playerDown1Img = new MyImageIcon("resources/player/"+skin+"/D1.png").resize(playerWidth, playerHeight);
+        playerDownmovementImg = new MyImageIcon("resources/player/"+skin+"/STOP.png").resize(playerWidth, playerHeight);
         endingbg = new MyImageIcon("resources/ending/1.png").resize(frameWidth, frameHeight);
         playerLabel = new JLabel(playerDown1Img);
         playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);

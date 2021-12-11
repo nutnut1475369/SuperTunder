@@ -1,77 +1,92 @@
 package frame;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Arrays;
 
 import javax.swing.*;
 
 import editor.MyImageIcon;
 import editor.MyLabel;
+import editor.MySoundEffect;
 import frame.dungeon.Dungeon;
 
 public class FirstFrame extends JFrame implements KeyListener{
     private JPanel contentpane;
 	private JLabel playerLabel, drawpane, objectdoor, objectcave;
-	private MyImageIcon door,cave,mapbg,playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
-	private int playerWidth = 33, playerHeight = 47;
+	private MyImageIcon door,cave, playerUp1Img,playerUp2Img,playerUp3Img, playerDown1Img,playerDown2Img,playerDown3Img, playerLeft1Img,playerLeft2Img,playerLeft3Img, playerRight1Img,playerRight2Img,playerRight3Img,playerDownmovementImg;
+	private int playerWidth = 60, playerHeight = 60;
 	private int frameWidth = 1200, frameHeight = 800;
-	private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
-	private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+	private int playerCurX, playerCurY ;
+	private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false,dungeon;
     private Ban _Ban;
     private MyLabel signLabel;
     private String name,skin;
     private int level;
+    private JLabel boat;
+    private MySoundEffect heroThemeSound;
+    private int[] monsterAlive;
 
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-	public FirstFrame(int _level, String _name, String _skin){
-	    level=_level;
+	public FirstFrame(int _level, String _name, String _skin,boolean _dungeon,int position){
+        dungeon = _dungeon;
+        level=_level;
+        monsterAlive = new int[level];
+        Arrays.fill(monsterAlive, 1);
         skin = _skin;
         name = _name;
+        System.out.println(skin);
         setTitle("AI NUT MAI WAI LEW");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                heroThemeSound.stop();
+            }
+        });
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
 		setResizable(false);
-        _Ban = new Ban(name,skin);
-        _Ban.setVisible(false);
-        _Ban.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
-		playerDown1Img = new MyImageIcon("resources/player/D1.png").resize(playerWidth, playerHeight);
-	    playerDown2Img = new MyImageIcon("resources/player/D2.png").resize(playerWidth, playerHeight);
-	    playerDown3Img = new MyImageIcon("resources/player/D3.png").resize(playerWidth, playerHeight);
-	    playerUp1Img = new MyImageIcon("resources/player/U1.png").resize(playerWidth, playerHeight);
-	    playerUp2Img = new MyImageIcon("resources/player/U2.png").resize(playerWidth, playerHeight);
-	    playerUp3Img = new MyImageIcon("resources/player/U3.png").resize(playerWidth, playerHeight);
-	    playerLeft1Img = new MyImageIcon("resources/player/L1.png").resize(playerWidth, playerHeight);
-	    playerLeft2Img = new MyImageIcon("resources/player/L2.png").resize(playerWidth, playerHeight);
-	    playerLeft3Img = new MyImageIcon("resources/player/L3.png").resize(playerWidth, playerHeight);
-	    playerRight1Img = new MyImageIcon("resources/player/R1.png").resize(playerWidth, playerHeight);
-	    playerRight2Img = new MyImageIcon("resources/player/R2.png").resize(playerWidth, playerHeight);
-	    playerRight3Img = new MyImageIcon("resources/player/R3.png").resize(playerWidth, playerHeight);
-	    playerDownmovementImg = new MyImageIcon("resources/player/STOP.png").resize(playerWidth, playerHeight);
-	    mapbg = new MyImageIcon("resources/map/MAP1.png").resize(frameWidth, frameHeight);
+		boat = new JLabel(new MyImageIcon("resources/object/boat.png").resize(70,70));
+        boat.setBounds(200,550,120,120);
+        playerDown1Img = new MyImageIcon("resources/player/"+ skin +"/D1.png").resize(playerWidth, playerHeight);
+        playerDown2Img = new MyImageIcon("resources/player/"+ skin +"/D2.png").resize(playerWidth, playerHeight);
+        playerDown3Img = new MyImageIcon("resources/player/"+ skin +"/D3.png").resize(playerWidth, playerHeight);
+        playerUp1Img = new MyImageIcon("resources/player/"+ skin +"/U1.png").resize(playerWidth, playerHeight);
+        playerUp2Img = new MyImageIcon("resources/player/"+ skin +"/U2.png").resize(playerWidth, playerHeight);
+        playerUp3Img = new MyImageIcon("resources/player/"+ skin +"/U3.png").resize(playerWidth, playerHeight);
+        playerLeft1Img = new MyImageIcon("resources/player/"+ skin +"/L1.png").resize(playerWidth, playerHeight);
+        playerLeft2Img = new MyImageIcon("resources/player/"+ skin +"/L2.png").resize(playerWidth, playerHeight);
+        playerLeft3Img = new MyImageIcon("resources/player/"+ skin +"/L3.png").resize(playerWidth, playerHeight);
+        playerRight1Img = new MyImageIcon("resources/player/"+ skin +"/R1.png").resize(playerWidth, playerHeight);
+        playerRight2Img = new MyImageIcon("resources/player/"+ skin +"/R2.png").resize(playerWidth, playerHeight);
+        playerRight3Img = new MyImageIcon("resources/player/"+ skin +"/R3.png").resize(playerWidth, playerHeight);
+        playerDownmovementImg = new MyImageIcon("resources/player/"+ skin +"/STOP.png").resize(playerWidth, playerHeight);
+        MyImageIcon mapbg = new MyImageIcon("resources/map/MAP1.png").resize(frameWidth, frameHeight);
         door = new MyImageIcon("resources/object/Door.png").resize(52, 52);
         cave = new MyImageIcon("resources/object/Cavemouth.png").resize(52, 52);
         objectcave = new JLabel(cave);
         objectdoor = new JLabel(door);
         objectdoor.setBounds(120,145,52,52);
         objectcave.setBounds(1125,15,37,37);
-        objectdoor.setVisible(true);
-        objectcave.setVisible(true);
         playerLabel = new JLabel(playerDown1Img);
+        heroThemeSound = new MySoundEffect("resources/Firstframe.wav");
+        heroThemeSound.playLoop();
+        if (position==0){
+            playerCurX = 97;
+            playerCurY = 177;
+        }else {
+            playerCurX = 1110;
+            playerCurY = 7;
+        }
 	    playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
 	    playerLabel.setVisible(true);
         drawpane = new JLabel();
-
-        if (level >= 1){
-            signLabel = new MyLabel("resources/object/sign.png").setLabel(50,50,10,20);
+        if (dungeon){
+            signLabel = new MyLabel("resources/object/sign.png").setLabel(47,425,50,50);
             drawpane.add(signLabel);
             signLabel.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
@@ -85,11 +100,8 @@ public class FirstFrame extends JFrame implements KeyListener{
 	    }
         drawpane.setIcon(mapbg);
         drawpane.add(playerLabel);
-        drawpane.add(objectdoor);
-        drawpane.add(objectcave);
+        drawpane.add(boat);
         addKeyListener(this);
-        setFocusable(true);
-        setFocusTraversalKeysEnabled(false);
 	    setPlayerThread();
 	    contentpane.add(drawpane, BorderLayout.CENTER);
 	    validate();
@@ -113,19 +125,30 @@ public class FirstFrame extends JFrame implements KeyListener{
         if (e.getKeyCode()==KeyEvent.VK_SHIFT){ playerrunning = false;}
     }
     public void actionPlayer(){
+        if (playerLabel.getBounds().intersects(boat.getBounds())){
+            boat.setVisible(!boat.isVisible());
+            if (boat.isVisible()){
+                playerLabel.setIcon(playerDownmovementImg);
+                playerCurX = 170;
+                playerCurY = 550;
+            }else {
+                playerCurX = 222;
+                playerCurY = 570;
+            }
+        }
 	    if (playerLabel.getBounds().intersects(objectdoor.getBounds())){
-            _Ban.setVisible(true);
+            new Ban(name,skin,dungeon,level);
             playerUp = false;
+            heroThemeSound.stop();
+            playerAlive=false;
             this.dispose();
         }
         if (playerLabel.getBounds().intersects(objectcave.getBounds())){
             if (level==0){
             }else {
-                int[] monsterAlive = new int[level];
-                Arrays.fill(monsterAlive, 1);
-                System.out.println(Arrays.toString(monsterAlive));
                 new Dungeon(1, monsterAlive, level, 0,name,skin);
                 playerAlive=false;
+                heroThemeSound.stop();
                 this.dispose();
             }
         }
@@ -143,87 +166,131 @@ public class FirstFrame extends JFrame implements KeyListener{
                 }else {
                     speed = 1;
                 }
-                if (playerLeft)
-                {
-                    if (moveMent%100==75){
-                        playerLabel.setIcon(playerLeft1Img);
-                    }else if(moveMent%100==50){
-                        playerLabel.setIcon(playerLeft2Img);
-                    }else if (moveMent%100==25){
-                        playerLabel.setIcon(playerLeft1Img);
-                    }else if (moveMent%100==0){
-                        playerLabel.setIcon(playerLeft3Img);
-                    }
-                    if (playerCurX>0) {
-                        playerCurX = playerCurX - speed;
-                    }
-                    if (playerCurX<=90&&playerCurY<=280) {
-                        playerCurX = playerCurX + speed;
-                    }
-                    if ((playerCurX<=1100&&playerCurX>=190)&&playerCurY<=280) {
-                        playerCurX = playerCurX + speed;
-                    }
-                }else
-                if(playerRight)
-                {
-                    if (moveMent%100==75){
-                        playerLabel.setIcon(playerRight1Img);
-                    }else if(moveMent%100==50){
-                        playerLabel.setIcon(playerRight2Img);
-                    }else if (moveMent%100==25){
-                        playerLabel.setIcon(playerRight1Img);
-                    }else if (moveMent%100==0){
-                        playerLabel.setIcon(playerRight3Img);
-                    }
-                    if (playerCurX+playerWidth+(playerWidth/2)<frameWidth) {
-                        playerCurX = playerCurX + speed;
-                    }
-                    if ((playerCurX>=135&&playerCurX<=1100)&&playerCurY<=280){
-                        playerCurX = playerCurX - 1;
-                    }
-                }else
-                if(playerUp)
-                {
-                    if (moveMent%100==75){
-                        playerLabel.setIcon(playerUp1Img);
-                    }else if(moveMent%100==50){
-                        playerLabel.setIcon(playerUp2Img);
-                    }else if (moveMent%100==25){
-                        playerLabel.setIcon(playerUp1Img);
-                    }else if (moveMent%100==0){
-                        playerLabel.setIcon(playerUp3Img);
-                    }
-                    if (playerCurY>0) {
+                if (boat.isVisible()){
+                    if (playerLeft) {
+                        if (moveMent % 100 == 75) {
+                            playerLabel.setIcon(playerLeft1Img);
+                        } else if (moveMent % 100 == 50) {
+                            playerLabel.setIcon(playerLeft2Img);
+                        } else if (moveMent % 100 == 25) {
+                            playerLabel.setIcon(playerLeft1Img);
+                        } else if (moveMent % 100 == 0) {
+                            playerLabel.setIcon(playerLeft3Img);
+                        }
+                        if (playerCurX > 0) {
+                            playerCurX = playerCurX - speed;
+                        }
+                        if (playerCurX <= 90 && playerCurY <= 280) {
+                            playerCurX = playerCurX + speed;
+                        }
+                        if ((playerCurX <= 1100 && playerCurX >= 190) && playerCurY <= 240) {
+                            playerCurX = playerCurX + speed;
+                        }
+                        if (playerCurY > 430 && playerCurX < 40) {
+                            playerCurX = playerCurX + speed;
+                        }
+                    } else if (playerRight) {
+                        if (moveMent % 100 == 75) {
+                            playerLabel.setIcon(playerRight1Img);
+                        } else if (moveMent % 100 == 50) {
+                            playerLabel.setIcon(playerRight2Img);
+                        } else if (moveMent % 100 == 25) {
+                            playerLabel.setIcon(playerRight1Img);
+                        } else if (moveMent % 100 == 0) {
+                            playerLabel.setIcon(playerRight3Img);
+                        }
+                        if (playerCurX + playerWidth + (playerWidth / 2) < frameWidth) {
+                            playerCurX = playerCurX + speed;
+                        }
+                        if ((playerCurX >= 135 && playerCurX <= 1100) && playerCurY <= 280) {
+                            playerCurX = playerCurX - speed;
+                        }
+                        if (((playerCurY > 430 && playerCurY < 530) || (playerCurY > 555)) && playerCurX > 65) {
+                            playerCurX = playerCurX - speed;
+                        }
+                        if ((playerCurY > 530 && playerCurY < 560) && playerCurX > 175) {
+                            playerCurX = playerCurX - speed;
+                        }
+                    } else if (playerUp) {
+                        if (moveMent % 100 == 75) {
+                            playerLabel.setIcon(playerUp1Img);
+                        } else if (moveMent % 100 == 50) {
+                            playerLabel.setIcon(playerUp2Img);
+                        } else if (moveMent % 100 == 25) {
+                            playerLabel.setIcon(playerUp1Img);
+                        } else if (moveMent % 100 == 0) {
+                            playerLabel.setIcon(playerUp3Img);
+                        }
+                        if (playerCurY > 0) {
                             playerCurY = playerCurY - speed;
+                        }
+                        if (playerCurY < 183 && playerCurX < 135) {
+                            playerCurY = playerCurY + speed;
+                        }
+                        if ((playerCurX <= 80 || (playerCurX >= 135 && playerCurX <= 1100)) && playerCurY <= 280) {
+                            playerCurY = playerCurY + speed;
+                        }
+                        if (playerCurY > 430 && (playerCurX < 40 || playerCurX > 75)) {
+                            playerCurY = playerCurY + speed;
+                        }
+                    } else if (playerDown) {
+                        if (moveMent % 100 == 75) {
+                            playerLabel.setIcon(playerDown1Img);
+                        } else if (moveMent % 100 == 50) {
+                            playerLabel.setIcon(playerDown2Img);
+                        } else if (moveMent % 100 == 25) {
+                            playerLabel.setIcon(playerDown1Img);
+                        } else if (moveMent % 100 == 0) {
+                            playerLabel.setIcon(playerDown3Img);
+                        }
+                        if (dungeon) {
+                            if (playerCurY < 417) {
+                                playerCurY = playerCurY + speed;
+                            }
+                        } else {
+                            if (playerCurY < 655) {
+                                playerCurY = playerCurY + speed;
+                            }
+                            if (playerCurY > 430 && (playerCurX < 40 || playerCurX > 65)) {
+                                playerCurY = playerCurY - speed;
+                            }
+                        }
+                    } else {
+                        if (moveMent % 200 == 100) {
+                            playerLabel.setIcon(playerDownmovementImg);
+                        } else if (moveMent % 200 == 0) {
+                            playerLabel.setIcon(playerDown1Img);
+                        }
                     }
-                    if (playerCurY<183&&playerCurX<135){
-                        playerCurY = playerCurY + 1;
-                    }
-                    if ((playerCurX<=90||(playerCurX>=135&&playerCurX<=1100))&&playerCurY<=280) {
-                        playerCurY = playerCurY + 1;
-                    }
+                }
+                else {
 
-                }else
-                if(playerDown)
-                {
-                    if (moveMent%100==75){
-                        playerLabel.setIcon(playerDown1Img);
-                    }else if(moveMent%100==50){
-                        playerLabel.setIcon(playerDown2Img);
-                    }else if (moveMent%100==25){
-                        playerLabel.setIcon(playerDown1Img);
-                    }else if (moveMent%100==0){
-                        playerLabel.setIcon(playerDown3Img);
-                    }
-                    if (playerCurY<417) {
-                        playerCurY = playerCurY + speed;
-                    }
-                }else
-                {
-                    if (moveMent%200==100){
-                        playerLabel.setIcon(playerDownmovementImg);
-                    }else if(moveMent%200==0){
-                        playerLabel.setIcon(playerDown1Img);
+                    if (playerLeft) {
+                        playerLabel.setIcon(new MyImageIcon("resources/player/"+skin+"/Boat/B4.png").resize(playerWidth,playerHeight));
+                        if (playerCurX > 200) {
+                            playerCurX = playerCurX - speed;
+                        }
+
+                    } else if (playerRight) {
+                        playerLabel.setIcon(new MyImageIcon("resources/player/"+skin+"/Boat/B3.png").resize(playerWidth,playerHeight));
+                        if (playerCurX  < frameWidth) {
+                            playerCurX = playerCurX + speed;
+                        }else {
+                            new River(name, skin);
+                            playerAlive = false;
+                        }
+                    } else if (playerUp) {
+                        playerLabel.setIcon(new MyImageIcon("resources/player/"+skin+"/Boat/B1.png").resize(playerWidth,playerHeight));
+                        if (playerCurY > 500) {
+                            playerCurY = playerCurY - speed;
+                        }
+                    } else if (playerDown) {
+                        playerLabel.setIcon(new MyImageIcon("resources/player/"+skin+"/Boat/B2.png").resize(playerWidth,playerHeight));
+                        if (playerCurY < frameHeight-playerHeight) {
+                            playerCurY = playerCurY + speed;
+                        }
+                    } else {
+                        playerLabel.setIcon(new MyImageIcon("resources/player/"+skin+"/Boat/B3.png").resize(playerWidth,playerHeight));
                     }
                 }
                 playerLabel.setLocation(playerCurX, playerCurY);

@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class OptionFrame extends JFrame implements ActionListener {
     private int level = 1;
@@ -19,9 +21,11 @@ public class OptionFrame extends JFrame implements ActionListener {
     private JComboBox Skin;
     private MyImageIcon backGround;
     private int frameWidth = 1200, frameHeight = 800;
-    String[] dataSkin = {"Default","One","Two","Three"};
+    String[] dataSkin = {"Default","One","Two","Three","Four"};
 
     public OptionFrame(){
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        skin = "Default";
         backGround = new MyImageIcon("resources/setting/setting.jpg").resize(frameWidth, frameHeight);
         setContentPane(new JLabel(backGround));
         Skin = new JComboBox(dataSkin);

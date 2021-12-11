@@ -5,9 +5,11 @@
         Thanawat  Tejapijaya    6313173
 */
 import frame.Home;
+import frame.River;
 
 public class Mainapplication {
     public static void main(String[] args) {
-        new Home();
+//        new Home();
+        new River("","Default");
     }
 }
