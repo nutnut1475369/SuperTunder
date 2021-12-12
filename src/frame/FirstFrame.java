@@ -277,6 +277,7 @@ public class FirstFrame extends JFrame implements KeyListener{
                             playerCurX = playerCurX + speed;
                         }else {
                             new River(name, skin);
+                            heroThemeSound.stop();
                             playerAlive = false;
                         }
                     } else if (playerUp) {

@@ -1,10 +1,16 @@
 package frame;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
 
 import javax.swing.*;
 
 import editor.MyImageIcon;
+import editor.MySoundEffect;
 
 public class EndingFrame extends JFrame {
     private JPanel contentpane;
@@ -15,8 +21,9 @@ public class EndingFrame extends JFrame {
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = frameWidth / 2 - playerWidth / 2, playerCurY = frameHeight / 2 - playerHeight / 2;
     private String name,skin;
-    private JButton Ban,homeScene;
-
+    private JLabel menuButton, homeButton;
+    private JLabel textEnding;
+    private MySoundEffect heroThemeSound;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
     public EndingFrame(String _name,String _skin,boolean died){
@@ -26,37 +33,63 @@ public class EndingFrame extends JFrame {
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
-//        addWindowListener(new WindowAdapter() {
-//            public void windowClosing(WindowEvent e) {
-//                heroThemeSound.stop();
-//            }
-//        });
-        homeScene = new JButton("menu");
-        homeScene.setBounds(100,10,10,10);
-        homeScene.addActionListener(e->{
-            new Home();
-            this.dispose();
-        });
-        Ban = new JButton("ban");
-        Ban.setBounds(100,100,10,10);
-        Ban.addActionListener(e->{
-            new Ban(name,skin,false,0);
-            this.dispose();
-        });
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
-        setResizable(false);
-        playerDown1Img = new MyImageIcon("resources/player/"+skin+"/D1.png").resize(playerWidth, playerHeight);
-        playerDownmovementImg = new MyImageIcon("resources/player/"+skin+"/STOP.png").resize(playerWidth, playerHeight);
-        endingbg = new MyImageIcon("resources/ending/1.png").resize(frameWidth, frameHeight);
+        drawpane = new JLabel();
+        try {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("prstart.ttf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+            if (!died) {
+                textEnding = new JLabel("<html>!!!CONGRATULATION!!!<br/> PLAYER : "+name.toUpperCase()+"<br/>YOU BEAT THE GAME<br/>WE HOPE YOU ENJOY<br/>THANK YOU FOR PLAYING</html>");
+                textEnding.setBounds(400,450,450,250);
+                textEnding.setFont(font.deriveFont(Font.BOLD, 18));
+                textEnding.setForeground(Color.white);
+                drawpane.add(textEnding);
+            }
+        }catch (FontFormatException | IOException e){
+            e.printStackTrace();
+        }
+        menuButton = new JLabel(new MyImageIcon("resources/button/MENU.png").resize(200,80));
+        menuButton.setBounds(100,600,200,80);
+        menuButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+                new Home();
+                heroThemeSound.stop();
+            }
+        });
+        homeButton = new JLabel(new MyImageIcon("resources/button/BAN.png").resize(200,80));
+        homeButton.setBounds(frameWidth-(300),600,200,80);
+        homeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+                new Ban(name,skin,false,0);
+                heroThemeSound.stop();
+            }
+        });
+        if (!died){
+            endingbg = new MyImageIcon("resources/gameresult/victory.png").resize(frameWidth, frameHeight);
+            heroThemeSound = new MySoundEffect("resources/victory.wav");
+            heroThemeSound.playOnce();
+            playerDown1Img = new MyImageIcon("resources/player/"+skin+"/D1.png").resize(playerWidth, playerHeight);
+            playerDownmovementImg = new MyImageIcon("resources/player/"+skin+"/STOP.png").resize(playerWidth, playerHeight);
+        }else {
+            endingbg = new MyImageIcon("resources/gameresult/gameover.png").resize(frameWidth, frameHeight);
+            heroThemeSound = new MySoundEffect("resources/gameover.wav");
+            heroThemeSound.playOnce();
+            playerDown1Img = new MyImageIcon("resources/player/dead1.png").resize(playerWidth, playerHeight);
+            playerDownmovementImg = new MyImageIcon("resources/player/dead2.png").resize(playerWidth, playerHeight);
+        }
         playerLabel = new JLabel(playerDown1Img);
         playerLabel.setBounds(playerCurX,playerCurY,playerWidth,playerHeight);
         playerLabel.setVisible(true);
-        drawpane = new JLabel();
         drawpane.setIcon(endingbg);
         drawpane.add(playerLabel);
-        getContentPane().add(homeScene);
-        getContentPane().add(Ban);
+        drawpane.add(menuButton);
+        drawpane.add(homeButton);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         setPlayerThread();

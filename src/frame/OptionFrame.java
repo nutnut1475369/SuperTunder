@@ -24,8 +24,8 @@ public class OptionFrame extends JFrame implements ActionListener {
     String[] dataSkin = {"Default","One","Two","Three","Four"};
 
     public OptionFrame(){
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         skin = "Default";
+        name = "Newbie";
         backGround = new MyImageIcon("resources/setting/setting.jpg").resize(frameWidth, frameHeight);
         setContentPane(new JLabel(backGround));
         Skin = new JComboBox(dataSkin);
