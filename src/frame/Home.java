@@ -1,7 +1,13 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import editor.MyImageIcon;
-import editor.MyLabel;
 import editor.MySoundEffect;
 
 import javax.swing.*;
@@ -28,7 +34,7 @@ public class Home extends JFrame{
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
     public Home() {
-        setTitle("SuperTunder v1.1.1");
+        setTitle("SuperTunder");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
@@ -77,8 +83,8 @@ public class Home extends JFrame{
         start.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                level = _optionFrame.getLevel();
                 heroThemeSound.stop();
+                level = _optionFrame.getLevel();
                 name = _optionFrame.getName();
                 skin = _optionFrame.getSkin();
                 new FirstFrame(level,name,skin,true,0);

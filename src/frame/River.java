@@ -1,3 +1,10 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import editor.MyImageIcon;
@@ -14,7 +21,7 @@ public class River extends JFrame {
 
     private JPanel contentpane;
     private JLabel playerLabel, drawpane, riverLabel;
-    private MyImageIcon riverScene, playerDown1Img,playerDownmovementImg;
+    private MyImageIcon riverScene, playerDown1Img;
     private int playerWidth = 60, playerHeight = 60;
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = 0, playerCurY = 600, riverCurX;
@@ -27,21 +34,15 @@ public class River extends JFrame {
     public River(String _name,String _skin){
         name = _name;
         skin = _skin;
-        setTitle("AI NUT MAI WAI LEW");
+        setTitle("SuperTunder");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
         heroThemeSound = new MySoundEffect("resources/River.wav");
-        heroThemeSound.playLoop();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("prstart.ttf"));
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-        }catch (FontFormatException | IOException e){
-            e.printStackTrace();
-        }
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
+        drawpane = new JLabel();
         skipButton = new JLabel(new MyImageIcon("resources/button/SKIP.png").resize(100,40));
         skipButton.setBounds(1050,700,100,40);
         skipButton.addMouseListener(new MouseAdapter() {
@@ -60,10 +61,10 @@ public class River extends JFrame {
         playerLabel = new JLabel(playerDown1Img);
         playerLabel.setBounds(playerCurX, playerCurY,playerWidth*2,playerHeight*2);
         playerLabel.setVisible(true);
-        drawpane = new JLabel();
         drawpane.add(playerLabel);
         drawpane.add(skipButton);
         drawpane.add(riverLabel);
+        heroThemeSound.playLoop();
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         setPlayerThread();

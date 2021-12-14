@@ -1,3 +1,10 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import java.awt.*;
@@ -19,11 +26,11 @@ public class FirstFrame extends JFrame implements KeyListener{
 	private int frameWidth = 1200, frameHeight = 800;
 	private int playerCurX, playerCurY ;
 	private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false,dungeon;
-    private Ban _Ban;
     private MyLabel signLabel;
     private String name,skin;
     private int level;
     private JLabel boat;
+    private Escape escape;
     private MySoundEffect heroThemeSound;
     private int[] monsterAlive;
 
@@ -33,11 +40,12 @@ public class FirstFrame extends JFrame implements KeyListener{
         dungeon = _dungeon;
         level=_level;
         monsterAlive = new int[level];
+        escape = new Escape(this);
         Arrays.fill(monsterAlive, 1);
         skin = _skin;
         name = _name;
         System.out.println(skin);
-        setTitle("AI NUT MAI WAI LEW");
+        setTitle("SuperTunder");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
@@ -49,7 +57,6 @@ public class FirstFrame extends JFrame implements KeyListener{
         });
         contentpane = (JPanel)getContentPane();
         contentpane.setLayout( new BorderLayout() );
-		setResizable(false);
 		boat = new JLabel(new MyImageIcon("resources/object/boat.png").resize(70,70));
         boat.setBounds(200,550,120,120);
         playerDown1Img = new MyImageIcon("resources/player/"+ skin +"/D1.png").resize(playerWidth, playerHeight);
@@ -114,6 +121,14 @@ public class FirstFrame extends JFrame implements KeyListener{
         if (e.getKeyCode()==KeyEvent.VK_DOWN) { playerDown = true;}
         if (e.getKeyCode()==KeyEvent.VK_LEFT) { playerLeft = true;}
         if (e.getKeyCode()==KeyEvent.VK_SHIFT){ playerrunning = true;}
+        if (e.getKeyCode()== KeyEvent.VK_ESCAPE){
+            escape.setVisible(true);
+            playerrunning = false;
+            playerRight = false;
+            playerDown = false;
+            playerLeft = false;
+            playerUp = false;
+        }
         if (e.getKeyCode()==KeyEvent.VK_SPACE){ actionPlayer();}
     }
 
@@ -161,8 +176,12 @@ public class FirstFrame extends JFrame implements KeyListener{
             int speed;
             while (playerAlive)
             {
+                if (!this.isDisplayable()){
+                    heroThemeSound.stop();
+                    playerAlive = false;
+                }
                 if (playerrunning){
-                    speed = 50;
+                    speed = 2;
                 }else {
                     speed = 1;
                 }
@@ -264,7 +283,6 @@ public class FirstFrame extends JFrame implements KeyListener{
                     }
                 }
                 else {
-
                     if (playerLeft) {
                         playerLabel.setIcon(new MyImageIcon("resources/player/"+skin+"/Boat/B4.png").resize(playerWidth,playerHeight));
                         if (playerCurX > 200) {
@@ -276,6 +294,7 @@ public class FirstFrame extends JFrame implements KeyListener{
                         if (playerCurX  < frameWidth) {
                             playerCurX = playerCurX + speed;
                         }else {
+                            this.dispose();
                             new River(name, skin);
                             heroThemeSound.stop();
                             playerAlive = false;

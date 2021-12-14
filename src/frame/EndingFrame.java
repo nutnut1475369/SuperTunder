@@ -1,3 +1,10 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import java.awt.*;
@@ -5,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.swing.*;
 
@@ -23,13 +29,12 @@ public class EndingFrame extends JFrame {
     private String name,skin;
     private JLabel menuButton, homeButton;
     private JLabel textEnding;
+    private boolean dungeon,playerAlive= true;
     private MySoundEffect heroThemeSound;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public EndingFrame(String _name,String _skin,boolean died){
-        name = _name;
-        skin = _skin;
-        setTitle("AI NUT MAI WAI LEW");
+    public EndingFrame(String name,String skin,boolean died,int level){
+        setTitle("SuperTunder");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
@@ -57,6 +62,7 @@ public class EndingFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 dispose();
                 new Home();
+                playerAlive=false;
                 heroThemeSound.stop();
             }
         });
@@ -66,17 +72,20 @@ public class EndingFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                new Ban(name,skin,false,0);
+                playerAlive=false;
+                new Ban(name,skin,dungeon,level);
                 heroThemeSound.stop();
             }
         });
         if (!died){
+            dungeon = false;
             endingbg = new MyImageIcon("resources/gameresult/victory.png").resize(frameWidth, frameHeight);
             heroThemeSound = new MySoundEffect("resources/victory.wav");
             heroThemeSound.playOnce();
             playerDown1Img = new MyImageIcon("resources/player/"+skin+"/D1.png").resize(playerWidth, playerHeight);
             playerDownmovementImg = new MyImageIcon("resources/player/"+skin+"/STOP.png").resize(playerWidth, playerHeight);
         }else {
+            dungeon = true;
             endingbg = new MyImageIcon("resources/gameresult/gameover.png").resize(frameWidth, frameHeight);
             heroThemeSound = new MySoundEffect("resources/gameover.wav");
             heroThemeSound.playOnce();
@@ -102,7 +111,7 @@ public class EndingFrame extends JFrame {
         // end run
         Thread playerThread = new Thread(() -> {
             int moveMent=0;
-            while (true)
+            while (playerAlive)
             {
                     if (moveMent%200==100){
                         playerLabel.setIcon(playerDownmovementImg);

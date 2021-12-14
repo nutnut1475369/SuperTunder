@@ -1,8 +1,16 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame.dungeon;
 
 import editor.MyImageIcon;
 import editor.MySoundEffect;
 import frame.EndingFrame;
+import frame.Escape;
 import frame.FirstFrame;
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +18,7 @@ import java.awt.event.*;
 
 public class Dungeon extends JFrame {
     private JPanel contentpane;
+    private JFrame escape;
     private JLabel playerLabel, drawpane, monsterLabel;
     private JProgressBar playerBar, monsterBar;
     private MyImageIcon mapbg, monsterLeftImg, monsterRightImg, playerUp1Img, playerUp2Img, playerUp3Img, playerDown1Img, playerDown2Img, playerDown3Img, playerLeft1Img, playerLeft2Img, playerLeft3Img, playerRight1Img, playerRight2Img, playerRight3Img, playerDownmovementImg;
@@ -18,16 +27,18 @@ public class Dungeon extends JFrame {
     private int state,cdHit = 0,cd = 0,level,position,monsterHp,hp;
     private int playerCurX, playerCurY = frameHeight / 2 - playerHeight / 2;
     private int monsterCurX = (frameWidth / 2 - playerWidth / 2) + 100, monsterCurY = (frameHeight / 2 - playerHeight / 2) + 100;
-    private boolean playerAlive = true,attack = false, playerrunning = false, playerUp = false, playerDown = false, playerLeft = false, playerRight = false;
+    private boolean pause,playerAlive = true,attack = false, playerrunning = false, playerUp = false, playerDown = false, playerLeft = false, playerRight = false;
     private int[] monsterAlive;
     private String name,skin;
     private FirstFrame _firstFrame;
     private MySoundEffect Hitted, playerAtt,heroThemeSound;
+    private int monsterSpeed = 1, playerSpeed, playerRun = 2;
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
     public Dungeon(int _state, int[] _monsterAlive ,int _level,int _position,String _name,String _skin) {
         name =_name;
         skin = _skin;
+        escape = new Escape(this);
         monsterAlive=_monsterAlive;
         level=_level;
         state = _state;
@@ -106,23 +117,27 @@ public class Dungeon extends JFrame {
                 if (monsterCurX>frameWidth) monsterHp=0;
                 if (monsterCurY>frameHeight) monsterHp=0;
             }
-
             @Override
             public void mouseMoved(MouseEvent e) {}
         });
         Thread monsterThread = new Thread(() -> {
-            while (monsterAlive[state-1] == 1) {
+            while (monsterAlive[state-1] == 1&&playerAlive) {
+                if (pause){
+                    monsterSpeed =0;
+                }else {
+                    monsterSpeed =1;
+                }
                 if (playerCurX != monsterCurX) {
                     if (playerCurX > monsterCurX){
-                        monsterCurX += 1;
+                        monsterCurX += monsterSpeed;
                         monsterLabel.setIcon(monsterRightImg);
                     }else {
-                        monsterCurX -= 1;
+                        monsterCurX -= monsterSpeed;
                         monsterLabel.setIcon(monsterLeftImg);
                     }
                 }
                 if (playerCurY != monsterCurY) {
-                    monsterCurY = playerCurY > monsterCurY ? monsterCurY + 1 : monsterCurY - 1;
+                    monsterCurY = playerCurY > monsterCurY ? monsterCurY + monsterSpeed : monsterCurY - monsterSpeed;
                 }
                 if (attack) {
                     if (getBoundatt().intersects(monsterLabel.getBounds())) {
@@ -179,6 +194,18 @@ public class Dungeon extends JFrame {
                     attack = true;
                     cd=30;
                 }
+                if (e.getKeyCode()== KeyEvent.VK_ESCAPE){
+                    escape.setVisible(true);
+                    pause = true;
+                    playerrunning = false;
+                    playerRight = false;
+                    playerDown = false;
+                    playerLeft = false;
+                    playerUp = false;
+                }
+                if (e.getKeyCode()== KeyEvent.VK_ENTER){
+                    pause = false;
+                }
             }
 
             @Override
@@ -203,16 +230,23 @@ public class Dungeon extends JFrame {
         // end run
         Thread playerThread = new Thread(() -> {
             int moveMent = 0;
-            int speed;
             hp = 10/level;
             while (playerAlive) {
+                if (!this.isDisplayable()){
+                    heroThemeSound.stop();
+                    playerAlive = false;
+                }
+                if (pause){
+                    playerSpeed =0;
+                }else {
+                    if (playerrunning){
+                        playerSpeed=playerRun;
+                    }else {
+                        playerSpeed=1;
+                    }
+                }
                 if (!attack&&cd<=0)
                 {
-                    if (playerrunning) {
-                        speed = 5;
-                    } else {
-                        speed = 1;
-                    }
                     if (playerLeft) {
                         if (moveMent % 100 == 75) {
                             playerLabel.setIcon(playerLeft1Img);
@@ -224,19 +258,25 @@ public class Dungeon extends JFrame {
                             playerLabel.setIcon(playerLeft3Img);
                         }
                         if (playerCurX > 0) {
-                            playerCurX = playerCurX - speed;
+                            playerCurX = playerCurX - playerSpeed;
                         }
                         if (playerCurX < 100) {
-                            state -= 1;
-                            if (state != 0) {
+                            playerAlive =false;
+                            if (state-1 != 0) {
+                                state -= 1;
+                            }
+                            if (state-1 != 0) {
                                 new Dungeon(state, monsterAlive, level, 1,name,skin);
                             } else {
                                 _firstFrame = new FirstFrame(level,name,skin,true,1);
                                 _firstFrame.setVisible(true);
                                 _firstFrame.setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
                                 this.dispose();
+                                heroThemeSound.stop();//jk
+                                break;
                             }
                             this.dispose();
+                            heroThemeSound.stop();//jk
                             break;
                         }
                     } else if (playerRight) {
@@ -250,12 +290,13 @@ public class Dungeon extends JFrame {
                             playerLabel.setIcon(playerRight3Img);
                         }
                         if (playerCurX < frameWidth - playerWidth) {
-                            playerCurX = playerCurX + speed;
+                            playerCurX = playerCurX + playerSpeed;
                         }
                         if (playerCurX > frameWidth - 100 && monsterAlive[state - 1] == 0) {
-                            state += 1;
+                                state += 1;
+                            playerAlive =false;
                             if (state == level + 1) {
-                                new EndingFrame(name,skin,false);
+                                new EndingFrame(name,skin,false,level);
                                 heroThemeSound.stop();
                                 this.dispose();
                                 break;
@@ -275,7 +316,7 @@ public class Dungeon extends JFrame {
                             playerLabel.setIcon(playerUp3Img);
                         }
                         if (playerCurY > 0) {
-                            playerCurY = playerCurY - speed;
+                            playerCurY = playerCurY - playerSpeed;
                         }
                     } else if (playerDown) {
                         if (moveMent % 100 == 75) {
@@ -288,7 +329,7 @@ public class Dungeon extends JFrame {
                             playerLabel.setIcon(playerDown3Img);
                         }
                         if (playerCurY < 710) {
-                            playerCurY = playerCurY + speed;
+                            playerCurY = playerCurY + playerSpeed;
                         }
                     } else {
                         if (moveMent % 200 == 100) {
@@ -375,7 +416,7 @@ public class Dungeon extends JFrame {
                 repaint();
                 if (hp<=0){
                     playerAlive = false;
-                    new EndingFrame(name,skin,true);
+                    new EndingFrame(name,skin,true,level);
                     heroThemeSound.stop();
                     this.dispose();
                     break;
@@ -388,6 +429,7 @@ public class Dungeon extends JFrame {
                     if (cd<=0){
                         attack=false;
                     }
+                    System.out.println("asd");
                     moveMent += 1;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -396,7 +438,6 @@ public class Dungeon extends JFrame {
         }); // end thread creation
         playerThread.start();
     }
-
     public Rectangle getBoundatt() {
         Rectangle T = playerLabel.getBounds();
         T.width = 30;

@@ -1,3 +1,10 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import editor.MyImageIcon;
@@ -6,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class OptionFrame extends JFrame implements ActionListener {
     private int level = 1;
@@ -26,11 +31,11 @@ public class OptionFrame extends JFrame implements ActionListener {
     public OptionFrame(){
         skin = "Default";
         name = "Newbie";
+        setTitle("Setting");
         backGround = new MyImageIcon("resources/setting/setting.jpg").resize(frameWidth, frameHeight);
-        setContentPane(new JLabel(backGround));
         Skin = new JComboBox(dataSkin);
         Skin.setBounds(600,100,150,30);
-        Skin.setSelectedIndex(3);
+        Skin.setSelectedIndex(0);
         Name = new JTextField();
         Name.setBounds(600,200,150,30);
         setSkinText = new JLabel("Select Character:");
@@ -61,13 +66,14 @@ public class OptionFrame extends JFrame implements ActionListener {
         levelManage3.setBounds(380,400,50,50);
         levelManage4.setBounds(380,460,50,50);
         levelManage5.setBounds(380,520,50,50);
-        getContentPane().setLayout(null);
         bg = new ButtonGroup();
         bg.add(levelManage1);
         bg.add(levelManage2);
         bg.add(levelManage3);
         bg.add(levelManage4);
         bg.add(levelManage5);
+        getContentPane().setLayout(null);
+        setContentPane(new JLabel(backGround));
         getContentPane().add(Name);
         getContentPane().add(levelManage1);
         getContentPane().add(levelManage2);

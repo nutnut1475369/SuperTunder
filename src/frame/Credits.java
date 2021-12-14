@@ -1,7 +1,13 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import editor.MyImageIcon;
-import editor.MySoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +25,7 @@ public class Credits extends JFrame {
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
 
     public Credits(){
-        setTitle("AI NUT MAI WAI LEW");
+        setTitle("SuperTunder");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);

@@ -1,3 +1,10 @@
+/*
+            Member
+        Nutapon   manusopit     6313127
+        Thanawat  Tejapijaya    6313173
+        Pasid     Khumjanad     6313177
+        Pisit     Lounseng      6313178
+*/
 package frame;
 
 import java.awt.*;
@@ -19,10 +26,11 @@ public class Ban extends JFrame implements KeyListener{
     private int frameWidth = 1200, frameHeight = 800;
     private int playerCurX = 137, playerCurY = 698;
     private int level;
-    private boolean playerAlive = true,playerrunning = false, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
+    private boolean playerAlive = true, playerUp = false,playerDown= false,playerLeft= false,playerRight= false;
     private String name,skin;
     private boolean dungeon;
     private MySoundEffect heroThemeSound;
+    private Escape escape;
 
     Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
     public Ban(String _name,String _skin,boolean _dungeon,int _level){
@@ -30,7 +38,8 @@ public class Ban extends JFrame implements KeyListener{
         level = _level;
         dungeon = _dungeon;
         skin = _skin;
-        setTitle("Ban Sand Suk");
+        escape = new Escape(this);
+        setTitle("SuperTunder");
         setBounds(ss.width / 2 - frameWidth / 2, ss.height / 2 - frameHeight / 2, frameWidth, frameHeight);
         setResizable(false);
         setVisible(true);
@@ -78,7 +87,13 @@ public class Ban extends JFrame implements KeyListener{
         if (e.getKeyCode()==KeyEvent.VK_UP) { playerUp = true;}
         if (e.getKeyCode()==KeyEvent.VK_DOWN) { playerDown = true;}
         if (e.getKeyCode()==KeyEvent.VK_LEFT) { playerLeft = true;}
-        if (e.getKeyCode()==KeyEvent.VK_SHIFT){ playerrunning = true;}
+        if (e.getKeyCode()== KeyEvent.VK_ESCAPE){
+            escape.setVisible(true);
+            playerRight = false;
+            playerDown = false;
+            playerLeft = false;
+            playerUp = false;
+        }
         if (e.getKeyCode()==KeyEvent.VK_SPACE){ actionPlayer();}
     }
 
@@ -87,7 +102,6 @@ public class Ban extends JFrame implements KeyListener{
         if (e.getKeyCode()==KeyEvent.VK_UP) { playerUp = false;}
         if (e.getKeyCode()==KeyEvent.VK_DOWN) { playerDown = false;}
         if (e.getKeyCode()==KeyEvent.VK_LEFT) { playerLeft = false;}
-        if (e.getKeyCode()==KeyEvent.VK_SHIFT){ playerrunning = false;}
     }
     public void actionPlayer(){}
     public void setPlayerThread()
@@ -98,11 +112,11 @@ public class Ban extends JFrame implements KeyListener{
             int speed;
             while (playerAlive)
             {
-                if (playerrunning){
-                    speed = 50;
-                }else {
-                    speed = 1;
+                if (!this.isDisplayable()){
+                    heroThemeSound.stop();
+                    playerAlive = false;
                 }
+                    speed = 1;
                 if (playerLeft)
                 {
                     if (moveMent%100==75){
@@ -118,22 +132,22 @@ public class Ban extends JFrame implements KeyListener{
                         playerCurX = playerCurX - speed;
                     }
                     if (playerCurX<=380&&(playerCurY>=346&&playerCurY<=477)){
-                        playerCurX = playerCurX + 1;
+                        playerCurX = playerCurX + speed;
                     }
                     if ((playerCurX>=450&&playerCurX<=517)&&(playerCurY>=148&&playerCurY<=487)){
-                        playerCurX = playerCurX + 1;
+                        playerCurX = playerCurX + speed;
                     }
                     if (playerCurX<=205&&(playerCurY>=148&&playerCurY<=346)){
-                        playerCurX = playerCurX + 1;
+                        playerCurX = playerCurX + speed;
                     }
                     if (playerCurX<=90&&playerCurY>=0){
-                        playerCurX = playerCurX + 1;
+                        playerCurX = playerCurX + speed;
                     }
                     if ((playerCurX>=700&&playerCurX<=765)&&(playerCurY>=280&&playerCurY<=477)){
-                        playerCurX = playerCurX + 1;
+                        playerCurX = playerCurX + speed;
                     }
                     if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=551&&playerCurY<=660)){
-                        playerCurX = playerCurX + 1;
+                        playerCurX = playerCurX + speed;
                     }
                 }else
                 if(playerRight)
@@ -151,22 +165,22 @@ public class Ban extends JFrame implements KeyListener{
                         playerCurX = playerCurX + speed;
                     }
                     if ((playerCurX>=620&&playerCurX<=755)&&(playerCurY>=280&&playerCurY<=410)){
-                        playerCurX = playerCurX - 1;
+                        playerCurX = playerCurX - speed;
                     }
                     if ((playerCurX>=450&&playerCurX<=517)&&(playerCurY>=148&&playerCurY<=346)){
-                        playerCurX = playerCurX - 1;
+                        playerCurX = playerCurX - speed;
                     }
                     if ((playerCurX>=380&&playerCurX<=400)&&(playerCurY>=346&&playerCurY<=477)){
-                        playerCurX = playerCurX - 1;
+                        playerCurX = playerCurX - speed;
                     }
                     if ((playerCurX>=656&&playerCurX<=755)&&(playerCurY>=410&&playerCurY<=708)){
-                        playerCurX = playerCurX - 1;
+                        playerCurX = playerCurX - speed;
                     }
                     if (playerCurX>=985&&(playerCurY>=280&&playerCurY<=708)){
-                        playerCurX = playerCurX - 1;
+                        playerCurX = playerCurX - speed;
                     }
                     if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=551&&playerCurY<=660)){
-                        playerCurX = playerCurX - 1;
+                        playerCurX = playerCurX - speed;
                     }
                     if (playerCurX==655&&(playerCurY>=628&&playerCurY<=678)){
                         playerCurX = 805;
@@ -189,25 +203,25 @@ public class Ban extends JFrame implements KeyListener{
                         playerCurY = playerCurY - speed;
                     }
                     if (playerCurY<183&&playerCurX<135){
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                     if ((playerCurX>=517&&playerCurX<=620)&&playerCurY<=280) {
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                     if ((playerCurX>=755&&playerCurX<=985)&&playerCurY<=280){
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                     if (playerCurX>=0&&playerCurY<=148){
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                     if(((playerCurX>=0&&playerCurX<=380)||(playerCurX>=400&&playerCurX<=517))&&(playerCurY>=340&&playerCurY<=487)) {
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                     if((playerCurX>=625&&playerCurX<=755)&&playerCurY<=410) {
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                     if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=551&&playerCurY<=660)){
-                        playerCurY = playerCurY + 1;
+                        playerCurY = playerCurY + speed;
                     }
                 }else
                 if(playerDown)
@@ -225,27 +239,22 @@ public class Ban extends JFrame implements KeyListener{
                         playerCurY = playerCurY + speed;
                     }
                     if ((playerCurX>=110&&playerCurX<=150)&&(playerCurY>=700&&playerCurY<=730)){
-                        if (dungeon) {
-                            heroThemeSound.stop();
-                            new FirstFrame(level, name, skin,dungeon,0);
-                        }else {
-                            heroThemeSound.stop();
-                            new FirstFrame(level, name, skin,dungeon,0);
-                        }
+                        heroThemeSound.stop();
+                        new FirstFrame(level, name, skin,dungeon,0);
                         playerDown = false;
                         this.dispose();
                     }
                     if(playerCurX>=755&&playerCurY>=430) {
-                        playerCurY = playerCurY - 1;
+                        playerCurY = playerCurY - speed;
                     }
                     if ((playerCurX>=450&&playerCurX<=517)&&playerCurY==346){
-                        playerCurY = playerCurY - 1;
+                        playerCurY = playerCurY - speed;
                     }
                     if (((playerCurX>=0&&playerCurX<380)||(playerCurX>400&&playerCurX<=517))&&(playerCurY>=340&&playerCurY<=487)){
-                        playerCurY = playerCurY - 1;
+                        playerCurY = playerCurY - speed;
                     }
                     if ((playerCurX>=280&&playerCurX<=410)&&(playerCurY>=550&&playerCurY<=551)){
-                        playerCurY = playerCurY - 1;
+                        playerCurY = playerCurY - speed;
                     }
                     if ((playerCurX>=793&&playerCurX<=813)&&(playerCurY>=428&&playerCurY<=430)){
                         playerCurX = 655;
